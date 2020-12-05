@@ -1,5 +1,6 @@
-<% if Helpers.is_logged_in?(session) %>
+<% if Helpers.logged_in?(session) %>
 <%= @error %>
+  <h1>Welcome,<%=Helpers.current_user(session).username%></h1>
   <form action='/tweets' method="post">
     Content:
     <input type="text" name="content"><br>
