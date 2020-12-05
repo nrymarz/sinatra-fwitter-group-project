@@ -1,0 +1,10 @@
+<%= @error %>
+<% if Helpers.logged_in?(session) %>
+    <h1>Welcome,<%=Helpers.current_user(session).username%></h1>
+    <h2>Tweets</h2>
+    <% @tweets.each do |tweet| %>
+        <p><b><%=tweet.user.username%></b></p>
+        <p><%=tweet.content%></p>
+        <br>
+    <%end%>
+<% end %>
