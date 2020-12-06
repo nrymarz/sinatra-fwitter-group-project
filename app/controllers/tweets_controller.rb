@@ -30,4 +30,17 @@ class TweetsController < ApplicationController
         erb :'/tweets/edit'
     end
 
+    post '/tweets' do 
+        if params[:content].size > 0 && Helpers.logged_in?(session)
+            tweet = Tweet.create(content: params[:content])
+            user = Helpers.current_user(session)
+            user.tweets << tweet
+            user.save
+            redirect "/users/#{user.slug}"
+        else
+            @error = "Write Something in the Content"
+            redirect '/tweets/new'
+        end
+    end
+
 end
