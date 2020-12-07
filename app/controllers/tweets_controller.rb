@@ -27,7 +27,15 @@ class TweetsController < ApplicationController
 
     get '/tweets/:id/edit' do
         @tweet = Tweet.find_by_id(params[:id])
-        erb :'/tweets/edit'
+        if Helpers.logged_in?(session)
+            if Helpers.current_user(session) == @tweet.user
+                erb :'/tweets/edit'
+            else
+                redirect '/tweets'
+            end
+        else
+            redirect '/login'
+        end
     end
 
     post '/tweets' do 
@@ -42,5 +50,30 @@ class TweetsController < ApplicationController
             redirect '/tweets/new'
         end
     end
+
+    patch '/tweets/:id' do 
+        if params[:content].size > 0 && Helpers.logged_in?(session)
+            tweet = Tweet.find(params[:id])
+            tweet.update(content: params[:content])
+            redirect "/users/#{tweet.user.slug}"
+        else
+            redirect "/tweets/#{params[:id]}/edit"
+        end
+    end
+
+    delete '/tweets/:id' do
+        tweet = Tweet.find(params[:id]) 
+        if Helpers.logged_in?(session)
+            if Helpers.current_user(session) == tweet.user
+                tweet.destroy
+                redirect '/tweets'
+            else
+                redirect '/tweets'
+            end
+        else
+            redirect '/login'
+        end
+    end
+
 
 end

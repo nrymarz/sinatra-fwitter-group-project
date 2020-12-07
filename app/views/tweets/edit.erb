@@ -1,1 +1,13 @@
-<h2>edit</h2>
+<% if Helpers.logged_in?(session) %>
+<%= @error %>
+  <form action='/tweets/<%=@tweet.id%>' method="post">
+    <input type='hidden' id='hidden' name='_method' value="patch">
+    Content:
+    <input type="text" name="content" value ="<%=@tweet.content%>" ><br>
+    <input type="submit" name="submit" id="Edit" value="Edit Tweet">
+
+  </form>
+
+<% else %>
+    <h1> You Must Be Logged in to Edit Tweets </h1>
+<% end %>
